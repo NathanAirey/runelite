@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Adam <Adam@sigterm.info>
+ * Copyright (c) 2019 logarrhytmic <https://github.com/logarrhythmic>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,56 +22,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.dpscounter;
+package net.runelite.client.plugins.skybox;
 
+import java.awt.Color;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("dpscounter")
-public interface DpsConfig extends Config
+@ConfigGroup("skybox")
+public interface SkyboxPluginConfig extends Config
 {
 	@ConfigItem(
-		position = 0,
-		keyName = "showDamage",
-		name = "Show damage",
-		description = "Show total damage instead of DPS"
+		keyName = "customOverworldColor",
+		name = "Overworld sky color",
+		description = "Sets the color to use for the sky in overworld areas.",
+		position = 1
 	)
-	default boolean showDamage()
-	{
-		return false;
-	}
+	Color customOverworldColor();
 
 	@ConfigItem(
-		position = 1,
-		keyName = "autopause",
-		name = "Auto pause",
-		description = "Pause the DPS tracker when a boss dies"
+		keyName = "customOtherColor",
+		name = "Cave sky color",
+		description = "Sets the color to use for the sky in non-overworld areas.",
+		position = 2
 	)
-	default boolean autopause()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 2,
-		keyName = "autoreset",
-		name = "Auto reset",
-		description = "Reset the DPS tracker when a boss dies"
-	)
-	default boolean autoreset()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 3,
-		keyName = "bossDamage",
-		name = "Only boss damage",
-		description = "Only count damage done to the boss, and not to other NPCs"
-	)
-	default boolean bossDamage()
-	{
-		return false;
-	}
+	Color customOtherColor();
 }
