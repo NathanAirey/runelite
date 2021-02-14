@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Abex
+ * Copyright (c) 2021, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,50 +22,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.http.api.gson;
+package net.runelite.client.plugins.gpu;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.Set;
+import org.jocl.Pointer;
+import org.jocl.cl_mem;
 
-public class IllegalReflectionExclusion implements ExclusionStrategy
+class GLBuffer
 {
-	private static final Set<ClassLoader> PRIVATE_CLASSLOADERS = new HashSet<>();
+	int glBufferId = -1;
+	int size = -1;
+	cl_mem cl_mem;
 
-	static
+	Pointer ptr()
 	{
-		for (ClassLoader cl = ClassLoader.getSystemClassLoader(); cl != null; )
-		{
-			cl = cl.getParent();
-			PRIVATE_CLASSLOADERS.add(cl);
-		}
-	}
-
-	@Override
-	public boolean shouldSkipField(FieldAttributes f)
-	{
-		if (!PRIVATE_CLASSLOADERS.contains(f.getDeclaringClass().getClassLoader()))
-		{
-			return false;
-		}
-
-		assert !Modifier.isPrivate(f.getDeclaringClass().getModifiers()) : "gsoning private class " + f.getDeclaringClass().getName();
-		try
-		{
-			f.getDeclaringClass().getField(f.getName());
-		}
-		catch (NoSuchFieldException e)
-		{
-			throw new AssertionError("gsoning private field " + f.getDeclaringClass() + "." + f.getName());
-		}
-		return false;
-	}
-
-	@Override
-	public boolean shouldSkipClass(Class<?> clazz)
-	{
-		return false;
+		return cl_mem != null ? Pointer.to(cl_mem) : null;
 	}
 }

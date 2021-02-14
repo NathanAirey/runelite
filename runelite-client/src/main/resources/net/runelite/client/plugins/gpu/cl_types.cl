@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Abex
+ * Copyright (c) 2021, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,50 +22,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.http.api.gson;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.Set;
+struct uniform {
+  int cameraYaw;
+  int cameraPitch;
+  int centerX;
+  int centerY;
+  int zoom;
+  int cameraX;
+  int cameraY;
+  int cameraZ;
+  int4 sinCosTable[2048];
+};
 
-public class IllegalReflectionExclusion implements ExclusionStrategy
-{
-	private static final Set<ClassLoader> PRIVATE_CLASSLOADERS = new HashSet<>();
+struct shared_data {
+  int totalNum[12]; // number of faces with a given priority
+  int totalDistance[12]; // sum of distances to faces of a given priority
+  int totalMappedNum[18]; // number of faces with a given adjusted priority
+  int min10; // minimum distance to a face of priority 10
+  int dfs[0]; // packed face id and distance, size 512 for small, 4096 for large
+};
 
-	static
-	{
-		for (ClassLoader cl = ClassLoader.getSystemClassLoader(); cl != null; )
-		{
-			cl = cl.getParent();
-			PRIVATE_CLASSLOADERS.add(cl);
-		}
-	}
-
-	@Override
-	public boolean shouldSkipField(FieldAttributes f)
-	{
-		if (!PRIVATE_CLASSLOADERS.contains(f.getDeclaringClass().getClassLoader()))
-		{
-			return false;
-		}
-
-		assert !Modifier.isPrivate(f.getDeclaringClass().getModifiers()) : "gsoning private class " + f.getDeclaringClass().getName();
-		try
-		{
-			f.getDeclaringClass().getField(f.getName());
-		}
-		catch (NoSuchFieldException e)
-		{
-			throw new AssertionError("gsoning private field " + f.getDeclaringClass() + "." + f.getName());
-		}
-		return false;
-	}
-
-	@Override
-	public boolean shouldSkipClass(Class<?> clazz)
-	{
-		return false;
-	}
-}
+struct modelinfo {
+  int offset;   // offset into buffer
+  int uvOffset; // offset into uv buffer
+  int size;     // length in faces
+  int idx;      // write idx in target buffer
+  int flags;    // radius, orientation
+  int x;        // scene position x
+  int y;        // scene position y
+  int z;        // scene position z
+};
