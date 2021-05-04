@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, Adam <Adam@sigterm.info>
+ * Copyright (c) 2021, Maciej <https://github.com/mlewicki12>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,47 +22,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package net.runelite.client.plugins.friendlist;
 
-package net.runelite.cache.definitions;
+import net.runelite.client.config.Config;
+import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigItem;
 
-import java.util.Map;
-import lombok.Data;
-
-@Data
-public class NpcDefinition
+@ConfigGroup("friendlist")
+public interface FriendListConfig extends Config
 {
-	public final int id;
-	public String name = "null";
-	public int size = 1;
-	public int[] models;
-	public int[] chatheadModels;
-	public int standingAnimation = -1;
-	public int rotateLeftAnimation = -1;
-	public int rotateRightAnimation = -1;
-	public int walkingAnimation = -1;
-	public int rotate180Animation = -1;
-	public int rotate90RightAnimation = -1;
-	public int rotate90LeftAnimation = -1;
-	public short[] recolorToFind;
-	public short[] recolorToReplace;
-	public short[] retextureToFind;
-	public short[] retextureToReplace;
-	public String[] actions = new String[5];
-	public boolean isMinimapVisible = true;
-	public int combatLevel = -1;
-	public int widthScale = 128;
-	public int heightScale = 128;
-	public boolean hasRenderPriority;
-	public int ambient;
-	public int contrast;
-	public int headIcon = -1;
-	public int rotationSpeed = 32;
-	public int[] configs;
-	public int varbitId = -1;
-	public int varpIndex = -1;
-	public boolean isInteractable = true;
-	public boolean rotationFlag = true;
-	public boolean isPet;
-	public Map<Integer, Object> params;
-	public int category;
+	@ConfigItem(
+		keyName = "showWorldOnLogin",
+		name = "Show world on login",
+		description = "Shows world number on friend login notifications"
+	)
+	default boolean showWorldOnLogin()
+	{
+		return false;
+	}
 }
